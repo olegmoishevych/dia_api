@@ -22,4 +22,7 @@ export class DatabaseService {
       });
     });
   }
+  async saveImagePath(path: string): Promise<void> {
+    await this.connection.execute('INSERT INTO images (path) VALUES (?)', [path]);
+  }
 }

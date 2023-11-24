@@ -10,11 +10,6 @@ export class ImageService {
   constructor(private dbService: DatabaseService) {
     this.ensureUploadFolderExists();
   }
-  async resizeImage(file: Express.Multer.File, width: number, height: number): Promise<Buffer> {
-    return sharp(file.buffer)
-      .resize(width, height)
-      .toBuffer();
-  }
   private ensureUploadFolderExists() {
     if (!fs.existsSync(this.uploadFolder)) {
       fs.mkdirSync(this.uploadFolder, { recursive: true });

@@ -23,7 +23,7 @@ export class AuthService {
       [email],
     );
 
-    if (!users.length) throw new NotFoundException('User already exists');
+    if (users.length) throw new NotFoundException('User already exists');
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await this.databaseService.query(

@@ -22,6 +22,7 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Register new user' })
   @ApiResponse({ status: 201, description: 'User successfully registered' })
+  @ApiResponse({ status: 404, description: 'User already exists' })
   @HttpCode(HttpStatus.CREATED)
   @Post('registration')
   async userRegistration(
@@ -33,6 +34,8 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Login user' })
   @ApiResponse({ status: 200, description: 'User logged in successfully' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiResponse({ status: 400, description: 'Incorrect password' })
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async login(
@@ -55,6 +58,8 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Refresh access token' })
   @ApiResponse({ status: 201, description: 'Access token refreshed' })
+  @ApiResponse({ status: 404, description: 'No refresh token provided' })
+  @ApiResponse({ status: 403, description: 'Invalid refresh token' })
   @HttpCode(HttpStatus.CREATED)
   @Post('refresh')
   async refreshToken(
@@ -79,6 +84,9 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Change user password' })
   @ApiResponse({ status: 200, description: 'Password changed successfully' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiResponse({ status: 400, description: 'Incorrect old password or new password too short' })
+  @ApiResponse({ status: 401, description: 'No refresh token provided' })
   @HttpCode(HttpStatus.OK)
   @Post('change-password')
   async changePassword(
@@ -94,6 +102,8 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Delete user account' })
   @ApiResponse({ status: 200, description: 'Account successfully deleted' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiResponse({ status: 401, description: 'No refresh token provided' })
   @HttpCode(HttpStatus.OK)
   @Delete('delete-account')
   async deleteAccount(@Req() request: Request): Promise<{ message: string }> {

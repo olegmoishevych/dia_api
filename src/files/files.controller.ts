@@ -1,4 +1,4 @@
-import { Controller, Get, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { Controller, Get, HttpCode, HttpStatus, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { ImageService } from "./image.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 import * as fs from "fs";
@@ -8,11 +8,14 @@ export class FilesController {
   private readonly uploadFolder = 'uploads';
   constructor(private readonly imageService: ImageService) {}
 
+  @HttpCode(HttpStatus.OK)
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
     await this.imageService.handleFile(file);
   }
+
+  @HttpCode(HttpStatus.OK)
   @Get('images')
   getImages(): { [key: string]: string } {
     const filenames = fs.readdirSync(this.uploadFolder);

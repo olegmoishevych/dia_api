@@ -14,10 +14,14 @@ import { AuthService } from './auth.service';
 import { RegisterAndLoginDto } from './dto/registration.dto';
 import { Response, Request } from 'express';
 import { ChangePasswordDto } from './dto/сhangePassword.dto';
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @ApiOperation({ summary: 'Register new user' })
+  @ApiResponse({ status: 201, description: 'User successfully registered' })
   @HttpCode(HttpStatus.CREATED)
   @Post('registration')
   async userRegistration(
@@ -27,6 +31,8 @@ export class AuthController {
     return { message: 'User successfully registered' };
   }
 
+  @ApiOperation({ summary: 'Login user' })
+  @ApiResponse({ status: 200, description: 'User logged in successfully' })
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async login(
@@ -47,6 +53,8 @@ export class AuthController {
     return response.json({ access_token });
   }
 
+  @ApiOperation({ summary: 'Refresh access token' })
+  @ApiResponse({ status: 201, description: 'Access token refreshed' })
   @HttpCode(HttpStatus.CREATED)
   @Post('refresh')
   async refreshToken(
@@ -69,6 +77,8 @@ export class AuthController {
     return response.json({ access_token });
   }
 
+  @ApiOperation({ summary: 'Change user password' })
+  @ApiResponse({ status: 200, description: 'Password changed successfully' })
   @HttpCode(HttpStatus.OK)
   @Post('change-password')
   async changePassword(
@@ -82,6 +92,8 @@ export class AuthController {
     return this.authService.changePassword(refreshToken, changePasswordDto);
   }
 
+  @ApiOperation({ summary: 'Delete user account' })
+  @ApiResponse({ status: 200, description: 'Account successfully deleted' })
   @HttpCode(HttpStatus.OK)
   @Delete('delete-account')
   async deleteAccount(@Req() request: Request): Promise<{ message: string }> {
